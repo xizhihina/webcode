@@ -33,7 +33,7 @@ class CodeResponse(BaseModel):
 
 
 @app.post("/api/run", response_model=CodeResponse)
-async def run_code(request: CodeRequest):
+def run_code(request: CodeRequest):
     code = request.code
 
     if len(code) > MAX_CODE_LENGTH:
@@ -71,7 +71,7 @@ async def run_code(request: CodeRequest):
         if result.returncode != 0:
             return CodeResponse(
                 output=stdout if stdout else None,
-                error=stderr,
+                error=stderr if stderr else None,
                 execution_time=execution_time,
             )
 
@@ -96,5 +96,8 @@ async def run_code(request: CodeRequest):
             execution_time=execution_time,
         )
     finally:
-        if "temp_path" in locals() and os.path.exists(temp_path):
-            os.unlink(temp_path)
+        try:
+            if "temp_path" in locals() and os.path.exists(temp_path):
+                os.unlink(temp_path)
+        except OSError:
+            pass  # File still in use, will be cleaned up by OS
