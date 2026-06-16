@@ -15,4 +15,4 @@ services:
       - backend
     restart: unless-stopped
     labels:
-      - "sandbox.expose: true"
+      sandbox.expose: "true"
