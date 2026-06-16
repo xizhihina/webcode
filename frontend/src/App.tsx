@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import CodeEditor from './components/Editor'
 import Output from './components/Output'
@@ -22,6 +22,17 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [executionTime, setExecutionTime] = useState<number | null>(null)
   const [isRunning, setIsRunning] = useState(false)
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault()
+        handleRun()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [code])
 
   const handleRun = async () => {
     setIsRunning(true)
