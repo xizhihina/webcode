@@ -1,0 +1,16 @@
+services:
+  frontend:
+    image: webcode-frontend
+    expose:
+      - "80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    labels:
+      sandbox.expose: "true"
+
+  backend:
+    image: webcode-backend
+    expose:
+      - "8000"
+    restart: unless-stopped

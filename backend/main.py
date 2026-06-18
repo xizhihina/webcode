@@ -2,12 +2,24 @@ import subprocess
 import sys
 import tempfile
 import os
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import time
 
 app = FastAPI()
+
+# 托管前端静态文件
+frontend_dist = Path(__file__).parent.parent / "frontend" / "dist"
+if frontend_dist.exists():
+    app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets")), name="assets")
+
+    @app.get("/")
+    async def serve_index():
+        return FileResponse(str(frontend_dist / "index.html"))
 
 app.add_middleware(
     CORSMiddleware,
