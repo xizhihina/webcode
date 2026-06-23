@@ -4,8 +4,8 @@ set -e
 # 安装 Python
 apt-get update && apt-get install -y python3 python3-pip python3-venv curl
 
-# 安装 Node.js 18
-curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+# 安装 Node.js 20
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 apt-get install -y nodejs
 
 # 构建前端
